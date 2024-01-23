@@ -2,7 +2,7 @@ import { Controller, Post, UseInterceptors, UploadedFile } from '@nestjs/common'
 import { ImageService } from './image.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { initializeApp } from 'firebase/app';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 
 const firebaseConfig = {
@@ -28,11 +28,17 @@ export class ImageController {
   @UseInterceptors(FileInterceptor('image'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
-    console.log('FILENAME', file.originalname);
-    const fileRef = ref(storage, file.originalname);
+    // console.log('FILENAME', file.originalname);
+    const timestamp = Date.now();
+    const extension = `${file.originalname.split('.')[1]}`;
+    const storageFilename = `${timestamp}.${extension}`;
+    const fileRef = ref(storage, storageFilename);
     try {
       const snapshot = await uploadBytes(fileRef, file.buffer);
       console.log('SNAPSHOT', snapshot);
+      const cloudUrl = await getDownloadURL(fileRef);
+      console.log('CLOUD URL', cloudUrl);
+      return this.ImageService.createImage({ cloudUrl });
     } catch (error) {
       console.log('ERROR AT UPLOADING FILE', error);
     }

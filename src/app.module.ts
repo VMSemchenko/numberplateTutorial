@@ -15,7 +15,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // import { DataSource } from 'typeorm';
 
 import { ImageModule } from './image/image.module'
-// import { Wallet } from './wallet/wallet.entity';
+import { Image } from './image/image.entity';
 // import { TransactionModule } from './transaction/transaction.module'
 // import { Transaction } from './transaction/transaction.entity';
 
@@ -33,7 +33,7 @@ import { ImageModule } from './image/image.module'
       // password: process.env.PASSWORD,
       username: 'mupzkvpitzcdgh',
       // username: process.env.USERNAME,
-      // entities: [Wallet, Transaction],
+      entities: [Image],
       database: 'delodbvpc5bl7b',
       // database: process.env.DATABASE,
       ssl: {

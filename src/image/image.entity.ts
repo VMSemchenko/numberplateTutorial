@@ -8,9 +8,9 @@ export class Image {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'string' })
+    @Column({ type: 'text' })
     cloudUrl: string;
 
-    @Column({ type: 'number' })
+    @Column({ type: 'bigint' })
     unixTimestamp: number;
 }
