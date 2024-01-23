@@ -12,9 +12,9 @@
 
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+// import { DataSource } from 'typeorm';
 
-// import { WalletModule } from './wallet/wallet.module'
+import { ImageModule } from './image/image.module'
 // import { Wallet } from './wallet/wallet.entity';
 // import { TransactionModule } from './transaction/transaction.module'
 // import { Transaction } from './transaction/transaction.entity';
@@ -41,7 +41,8 @@ import { DataSource } from 'typeorm';
       },
       synchronize: true
     }),
-    // WalletModule, TransactionModule
+    ImageModule,
+    // TransactionModule
   ],
 })
 export class AppModule { }
