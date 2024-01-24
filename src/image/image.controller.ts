@@ -18,7 +18,11 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const storage = getStorage(firebaseApp);
 
+// OCR key K86156759888957
+
 // gs://node-js-tutorial-microservice.appspot.com
+
+// Free OCR endpoint https://api.ocr.space/parse/image
 
 @Controller('images')
 export class ImageController {
@@ -41,6 +45,15 @@ export class ImageController {
       return this.ImageService.createImage({ cloudUrl });
     } catch (error) {
       console.log('ERROR AT UPLOADING FILE', error);
+    }
+  }
+
+  async parseNumberplate(cloudUrl: string) {
+    try {
+      const httpsReference = ref(storage, cloudUrl);
+      console.log('HTTPS REFERENCE', httpsReference);
+    } catch (error) {
+      console.log('ERROR AT FETCHING IMAGE', error);
     }
   }
 }
