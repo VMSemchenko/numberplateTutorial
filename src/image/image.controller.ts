@@ -1,8 +1,9 @@
-import { Controller, Post, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Get } from '@nestjs/common';
 import { ImageService } from './image.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { initializeApp } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import axios from 'axios';
 
 
 const firebaseConfig = {
@@ -31,27 +32,42 @@ export class ImageController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('image'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-    // console.log('FILENAME', file.originalname);
     const timestamp = Date.now();
     const extension = `${file.originalname.split('.')[1]}`;
     const storageFilename = `${timestamp}.${extension}`;
     const fileRef = ref(storage, storageFilename);
     try {
       const snapshot = await uploadBytes(fileRef, file.buffer);
-      console.log('SNAPSHOT', snapshot);
       const cloudUrl = await getDownloadURL(fileRef);
-      console.log('CLOUD URL', cloudUrl);
       return this.ImageService.createImage({ cloudUrl });
     } catch (error) {
       console.log('ERROR AT UPLOADING FILE', error);
     }
   }
 
+  @Get('download')
   async parseNumberplate(cloudUrl: string) {
     try {
-      const httpsReference = ref(storage, cloudUrl);
-      console.log('HTTPS REFERENCE', httpsReference);
+      const cloudUrl = 'https://firebasestorage.googleapis.com/v0/b/node-js-tutorial-microservice.appspot.com/o/1706133912252.jpeg?alt=media&token=11c35d6e-afa3-4db5-b9cb-90d18960effb';
+      const data = new FormData();
+      // data.append('language', 'eng');
+      // data.append('isOverlayRequired', 'false');
+      data.append('url', cloudUrl);
+      // data.append('iscreatesearchablepdf', 'false');
+      // data.append('issearchablepdfhidetextlayer', 'false');
+      data.append('filetype', 'JPG');
+
+      const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api.ocr.space/parse/image',
+        headers: {
+          'apikey': 'K86156759888957',
+        },
+        data
+      };
+      const ocrResponse = await axios(config);
+      console.log('OCR RESPONSE', ocrResponse.data.ParsedResults[0].ParsedText);
     } catch (error) {
       console.log('ERROR AT FETCHING IMAGE', error);
     }

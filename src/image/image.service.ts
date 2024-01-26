@@ -12,7 +12,6 @@ export class ImageService {
   ) { }
 
   async createImage(data: Pick<Image, 'cloudUrl'>): Promise<Image> {
-    console.log('CREATE IMAGE ATTEMPT', data);
     const { cloudUrl } = data;
     return this.ImageRepository.save({
       cloudUrl, unixTimestamp: Date.now()
