@@ -50,11 +50,7 @@ export class ImageController {
     try {
       const cloudUrl = 'https://firebasestorage.googleapis.com/v0/b/node-js-tutorial-microservice.appspot.com/o/1706133912252.jpeg?alt=media&token=11c35d6e-afa3-4db5-b9cb-90d18960effb';
       const data = new FormData();
-      // data.append('language', 'eng');
-      // data.append('isOverlayRequired', 'false');
       data.append('url', cloudUrl);
-      // data.append('iscreatesearchablepdf', 'false');
-      // data.append('issearchablepdfhidetextlayer', 'false');
       data.append('filetype', 'JPG');
 
       const config = {
@@ -66,8 +62,12 @@ export class ImageController {
         },
         data
       };
+
       const ocrResponse = await axios(config);
-      console.log('OCR RESPONSE', ocrResponse.data.ParsedResults[0].ParsedText);
+      console.log(ocrResponse.data);
+      const textData = ocrResponse.data.ParsedResults[0].ParsedText;
+      const result = textData.split('\r\n')[0].trim();
+      return result;
     } catch (error) {
       console.log('ERROR AT FETCHING IMAGE', error);
     }
