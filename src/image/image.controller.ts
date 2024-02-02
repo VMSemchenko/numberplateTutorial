@@ -37,7 +37,6 @@ export class ImageController {
     const storageFilename = `${timestamp}.${extension}`;
     const fileRef = ref(storage, storageFilename);
     try {
-      const snapshot = await uploadBytes(fileRef, file.buffer);
       const cloudUrl = await getDownloadURL(fileRef);
       return this.ImageService.createImage({ cloudUrl });
     } catch (error) {
