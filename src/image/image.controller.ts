@@ -36,12 +36,8 @@ export class ImageController {
     const extension = `${file.originalname.split('.')[1]}`;
     const storageFilename = `${timestamp}.${extension}`;
     const fileRef = ref(storage, storageFilename);
-    try {
-      const cloudUrl = await getDownloadURL(fileRef);
-      return this.ImageService.createImage({ cloudUrl });
-    } catch (error) {
-      console.log('ERROR AT UPLOADING FILE', error);
-    }
+    const cloudUrl = await getDownloadURL(fileRef);
+    return this.ImageService.createImage({ cloudUrl });
   }
 
   @Get('download')
