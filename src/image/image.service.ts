@@ -19,12 +19,6 @@ export class ImageService {
   }
 
   async parseImages(): Promise<void> {
-    try {
-      console.log('ATTEMPT PARSING IMAGES');
-      const imageData = await this.ImageRepository.find();
-      console.log('IMAGE DATA', imageData);
-    } catch (error) {
-      console.log('ERROR AT FINDING DATA', error);
-    }
+    const imageData = await this.ImageRepository.find();
   }
 }

@@ -2,10 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ImageModule } from './image/image.module';
-import { SchedulerModule } from './scheduler/scheduler.module';
 import { Image } from './image/image.entity';
 import { ScheduleModule } from '@nestjs/schedule';
-import { SchedulerService } from './scheduler/scheduler.service';
 
 
 @Module({
@@ -26,7 +24,6 @@ import { SchedulerService } from './scheduler/scheduler.service';
       synchronize: true
     }),
     ImageModule,
-    SchedulerModule
   ],
 })
 
