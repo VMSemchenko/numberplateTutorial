@@ -1,17 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-// import { ImageService } from '.e';
+import { ImageService } from './image.service';
 
 @Injectable()
 export class ImageCron {
 
-    // constructor(
-    //     private imageService: ImageService
-    // ) { }
+    constructor(
+        private imageService: ImageService
+    ) { }
 
-    @Cron(CronExpression.EVERY_5_SECONDS)
+    @Cron(CronExpression.EVERY_30_SECONDS)
     handleCron() {
-        console.log('HELLO, I AM SCHEDULER SERVICE');
-        // this.imageService.parseImages();
+        this.imageService.parseImages();
     }
 }
