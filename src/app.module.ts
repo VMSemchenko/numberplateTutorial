@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MongooseModule } from "@nestjs/mongoose";
 
 import { ImageModule } from './image/image.module';
+import { LogModule } from './log/log.module';
 import { Image } from './image/image.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 
@@ -26,6 +27,7 @@ const DB_URL = 'mongodb+srv://vmsemchenkokhua:a00190019@cluster0.jw1me.mongodb.n
     }),
     MongooseModule.forRoot('mongodb+srv://vmsemchenkokhua:a00190019@cluster0.jw1me.mongodb.net/?retryWrites=true&w=majority'),
     ImageModule,
+    LogModule,
     ScheduleModule.forRoot(),
   ],
 })
