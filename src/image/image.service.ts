@@ -51,14 +51,12 @@ export class ImageService {
     const ocrResponseData = await Promise.all([imageData[0]].map((dataItem) => this.fetchOCRResponse(dataItem.cloudUrl)));
     const parsedNumberPlateData = ocrResponseData.map((item, index) => (
       {
-        numberPlate: item.ParsedResults[0].ParsedText.split('\r')[0],
+        numberplate: item.ParsedResults[0].ParsedText.split('\r')[0],
         timestamp: imageData[index].unixTimestamp,
       }
     ));
     // console.log('PARSED NUMBER PLATE DATA', parsedNumberPlateData);
-    parsedNumberPlateData.forEach((item) => {
-      this.logService.createLog(item.numberPlate, item.timestamp);
-    });
-    return parsedNumberPlateData;
+    const response = await this.logService.createLogs(parsedNumberPlateData);
+    console.log('RESPONSE', response);
   }
 }

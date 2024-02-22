@@ -11,7 +11,6 @@ export class ImageCron {
 
     @Cron(CronExpression.EVERY_30_SECONDS)
     handleCron() {
-        console.log('Called when the current second is 30');
         this.imageService.parseImages();
     }
 }

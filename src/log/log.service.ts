@@ -7,10 +7,10 @@ import { Log } from './log.model';
 export class LogService {
   constructor(@InjectModel(Log.name) private readonly logModel: Model<Log>) { }
 
-  async createLog(numberplate: string, timestamp: number): Promise<void> {
-    console.log('CREATE LOG', numberplate, timestamp);
+  async createLogs(logsData: { numberplate: string, timestamp: number }[]): Promise<Log[]> {
     // const createdLog = new this.logModel({ numberplate, timestamp });
-    // return createdLog.save();
+    const result = await this.logModel.insertMany(logsData);
+    return result;
   }
 
   async findAllLogs(): Promise<Log[]> {
