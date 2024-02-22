@@ -4,12 +4,13 @@ import { Model } from 'mongoose';
 import { Log } from './log.model';
 
 @Injectable()
-export class LogsService {
+export class LogService {
   constructor(@InjectModel(Log.name) private readonly logModel: Model<Log>) { }
 
-  async createLog(numberplate: string, timestamp: number): Promise<Log> {
-    const createdLog = new this.logModel({ numberplate, timestamp });
-    return createdLog.save();
+  async createLog(numberplate: string, timestamp: number): Promise<void> {
+    console.log('CREATE LOG', numberplate, timestamp);
+    // const createdLog = new this.logModel({ numberplate, timestamp });
+    // return createdLog.save();
   }
 
   async findAllLogs(): Promise<Log[]> {

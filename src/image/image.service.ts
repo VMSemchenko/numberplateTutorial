@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Image } from './image.entity';
+import { LogService } from '../log/log.service';
 import axios from 'axios';
 
 @Injectable()
@@ -10,6 +11,7 @@ export class ImageService {
   constructor(
     @InjectRepository(Image)
     private ImageRepository: Repository<Image>,
+    private logService: LogService
   ) { }
 
   protected async fetchOCRResponse(cloudUrl: string) {
@@ -45,14 +47,18 @@ export class ImageService {
 
   async parseImages(): Promise<any> {
     const imageData = await this.ImageRepository.find();
+
     const ocrResponseData = await Promise.all([imageData[0]].map((dataItem) => this.fetchOCRResponse(dataItem.cloudUrl)));
     const parsedNumberPlateData = ocrResponseData.map((item, index) => (
       {
         numberPlate: item.ParsedResults[0].ParsedText.split('\r')[0],
-        timestamp: imageData[index].unixTimestamp
+        timestamp: imageData[index].unixTimestamp,
       }
     ));
-    console.log('OCR RESPONSE DATA', parsedNumberPlateData);
+    // console.log('PARSED NUMBER PLATE DATA', parsedNumberPlateData);
+    parsedNumberPlateData.forEach((item) => {
+      this.logService.createLog(item.numberPlate, item.timestamp);
+    });
     return parsedNumberPlateData;
   }
 }
