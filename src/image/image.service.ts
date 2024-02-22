@@ -15,7 +15,6 @@ export class ImageService {
   ) { }
 
   protected async fetchOCRResponse(cloudUrl: string) {
-    console.log('CLOUD URL', cloudUrl);
     try {
       const data = new FormData();
       data.append('url', cloudUrl);
@@ -48,15 +47,14 @@ export class ImageService {
   async parseImages(): Promise<any> {
     const imageData = await this.ImageRepository.find();
 
-    const ocrResponseData = await Promise.all([imageData[0]].map((dataItem) => this.fetchOCRResponse(dataItem.cloudUrl)));
+    const ocrResponseData = await Promise.all(imageData.map((dataItem) => this.fetchOCRResponse(dataItem.cloudUrl)));
     const parsedNumberPlateData = ocrResponseData.map((item, index) => (
       {
         numberplate: item.ParsedResults[0].ParsedText.split('\r')[0],
         timestamp: imageData[index].unixTimestamp,
       }
-    ));
-    // console.log('PARSED NUMBER PLATE DATA', parsedNumberPlateData);
+    )).filter((item) => item.numberplate);
     const response = await this.logService.createLogs(parsedNumberPlateData);
-    console.log('RESPONSE', response);
+    await this.ImageRepository.remove(imageData);
   }
 }

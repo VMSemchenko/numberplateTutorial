@@ -9,7 +9,7 @@ export class ImageCron {
         private imageService: ImageService
     ) { }
 
-    @Cron(CronExpression.EVERY_30_SECONDS)
+    @Cron(CronExpression.EVERY_5_SECONDS)
     handleCron() {
         this.imageService.parseImages();
     }
